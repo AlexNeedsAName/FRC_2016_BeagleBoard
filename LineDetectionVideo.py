@@ -34,7 +34,11 @@ while True:
     # Threshold the HSV image to get only white colors
     Threshold = cv2.inRange(hsv, lower_white, upper_white)
 
-    edges = cv2.Canny(Threshold,50,150,apertureSize = 3)
+    #Eliminate small peices of a thresholded image
+    kernel = np.ones((5,5),np.uint8)
+    opening = cv2.morphologyEx(Threshold, cv2.MORPH_OPEN, kernel)
+
+    edges = cv2.Canny(opening,50,150,apertureSize = 3)
 
     lines = cv2.HoughLines(edges,1,np.pi/180,75)
     if lines != None:

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def findWhiteLine(video,cameraNumber):
+def findWhiteLine(cameraNumber):
     #Get current frame from camera
     cap = cv2.VideoCapture(cameraNumber)
 
@@ -45,9 +45,20 @@ def findWhiteLine(video,cameraNumber):
 
     #Hough line detection
     lines = cv2.HoughLines(edges,1,np.pi/180,75)
-    if lines[0] != None:
-        return lines[0].rho+' '+lines[0].theta
-    else:
-        return False
+    if lines != None:
+        for rho,theta in lines[0]:
+            a = np.cos(theta)
+            b = np.sin(theta)
+            x0 = a*rho
+            y0 = b*rho
+            x1 = int(x0 + 1000*(-b))
+            y1 = int(y0 + 1000*(a))
+            x2 = int(x0 - 1000*(-b))
+            y2 = int(y0 - 1000*(a))
 
-print findWhiteLine(True,0)
+            Output = lines[0].rho+' '+lines[0].theta
+    else:
+        Output = 'False'
+    return Output
+
+print findWhiteLine(0)

@@ -1,8 +1,12 @@
 import cv2
 import numpy as np
 
-
+#Get current frame from camera
 cap = cv2.VideoCapture(0)
+
+#Set size of said frame
+#cap.set(3, 160)
+#cap.set(4, 120)
 
 while True:
 
@@ -20,8 +24,36 @@ while True:
     #Remove Noise and Grain
     median = cv2.medianBlur(dst,5)
 
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(median, cv2.COLOR_BGR2HSV)
 
-    cv2.imshow('Perspective Transform', median)
+    # define range of white color in HSV
+    lower_white = np.array([0,0,200])
+    upper_white = np.array([180,50,255])
+
+    # Threshold the HSV image to get only white colors
+    Threshold = cv2.inRange(hsv, lower_white, upper_white)
+
+    edges = cv2.Canny(Threshold,50,150,apertureSize = 3)
+
+    lines = cv2.HoughLines(edges,1,np.pi/180,75)
+    if lines != None:
+        for rho,theta in lines[0]:
+            a = np.cos(theta)
+            b = np.sin(theta)
+            x0 = a*rho
+            y0 = b*rho
+            x1 = int(x0 + 1000*(-b))
+            y1 = int(y0 + 1000*(a))
+            x2 = int(x0 - 1000*(-b))
+            y2 = int(y0 - 1000*(a))
+
+            cv2.line(median,(x1,y1),(x2,y2),(0,0,255),2)
+    else:
+        print 'none'
+
+    cv2.imshow('Lines', median)
+    cv2.imshow('Threshold', Threshold)
 
     k = cv2.waitKey(5) & 0xFF
     if k == 27:

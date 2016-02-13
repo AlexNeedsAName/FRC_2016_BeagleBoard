@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 #Get current frame from camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 #Set size of said frame
 #cap.set(3, 160)
@@ -28,7 +28,7 @@ while True:
     hsv = cv2.cvtColor(median, cv2.COLOR_BGR2HSV)
 
     # define range of white color in HSV
-    lower_white = np.array([0,0,200])
+    lower_white = np.array([0,0,100])
     upper_white = np.array([180,50,255])
 
     # Threshold the HSV image to get only white colors

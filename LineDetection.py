@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+import time
 
 def findWhiteLine(cameraNumber):
     #Get current frame from camera
@@ -61,4 +61,7 @@ def findWhiteLine(cameraNumber):
         Output = 'False'
     return Output
 
-print findWhiteLine(0)
+while True:
+    print findWhiteLine(0)
+    time.sleep(0.025)
+

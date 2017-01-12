@@ -53,15 +53,6 @@ while(True):
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
 
-        if cx >= 120:
-            print "Turn Left!"
-
-        if cx < 120 and cx > 50:
-            print "On Track!"
-
-        if cx <= 50:
-            print "Turn Right"
-
     else:
         print "I don't see the line"
 

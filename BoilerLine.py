@@ -19,14 +19,14 @@ while(True):
     #Convert to Hue, Saturation, and Value colorspace
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
-    # define range of white color in HSV
-    lower_white = np.array([0, 40, 0])
-    upper_white = np.array([10, 255, 255])
+    # define range of red color in HSV
+    lower_red = np.array([0, 40, 0])
+    upper_red = np.array([10, 255, 255])
 
     # Threshold the HSV image to get only white colors
-    thresh = cv2.inRange(hsv, lower_white, upper_white)
+    thresh = cv2.inRange(hsv, lower_red, upper_red)
 
-    # Color thresholding
+    # Black and white thresholding
     #ret,thresh = cv2.threshold(blur,60,255,cv2.THRESH_BINARY_INV)
 
     # Find the contours of the frame
@@ -35,8 +35,11 @@ while(True):
     # Find the biggest contour (if detected)
     if len(contours) > 0:
         c = max(contours, key=cv2.contourArea)
-        #M = cv2.moments(c)
+
+	#This code is for finding the center of the contour, however I can't figure out how to keep it from returning
+	#"Can't divide M['m10'] by zero" even after I added the "if M['m00'] is 0:" loop.
 	
+	#M = cv2.moments(c)
 	#if M['m00'] is 0:
         #    cx = int(M['m10'])
         #    cy = int(M['m01'])
@@ -44,6 +47,7 @@ while(True):
 	#    cx = int(M['m10']/M['m00'])
         #    cy = int(M['m01']/M['m00'])
 
+	#Draw a crosshair to show the center of the contour
         #cv2.line(frame,(cx,0),(cx,720),(255,0,0),1)
         #cv2.line(frame,(0,cy),(1280,cy),(255,0,0),1)
 
@@ -60,6 +64,7 @@ while(True):
         xDifference = (thresh.shape[1]-1) - 0
         yDifference = righty-lefty
 
+	#I apologize for a lack of a better variable name
         pythagOne = (xDifference*xDifference) + (yDifference*yDifference)
         pythagTwo = math.sqrt(pythagOne)
 
@@ -71,20 +76,24 @@ while(True):
 
         lineDegrees = math.degrees(lineRadians)
 
+	#Draw the angle of the line on the screen
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(frame, str(lineDegrees), (10, 120), font, 1, (255, 0, 0), 2)
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
 
+	#Output the angle of the line to stdout for Client.java to read
         sys.stdout.write(str(lineDegrees)+"\n")
 
     else:
+	#If no line is detected say the line's angle is just zero
         sys.stdout.write("0\n")
 
+    #This is to prevent the program from accidentally holding in the stdout messages
     sys.stdout.flush()
 
     #Display the resulting frame
-    #cv2.imshow('frame',frame)
+    cv2.imshow('frame',frame)
     time.sleep(1)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

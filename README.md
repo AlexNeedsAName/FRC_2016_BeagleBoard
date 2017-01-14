@@ -5,9 +5,13 @@ This repo includes a file for each openCV function our robot will use during aut
 
 # Client.java
 This file is used to communicate between the beagleboard and the roboRIO. It takes in values through stdin and then sends them through UDP to the roboRIO. It also can read messages received from the roboRIO. It is compiled with:
-  javac Client.java
+
+    javac Client.java
+      
 and run with:
-  java Client
+
+    java Client
+    
 You can then type in values and they will be sent to the roboRIO. (If you are encountering any read errors on the roboRIO add a space after the text you write since that is how the roboRIO splits the incoming UDP string).
 
 # BoilerLine.py
@@ -17,4 +21,5 @@ There are some performance changes I am currently working on for this code. One 
 
 # Running the entire program
 To run the entire program you can take the data coming from BoilerLine's stdout and pipe that into Client.java. This can be done by running:
-  python BoilerLine.py | java Client
+
+    python BoilerLine.py | java Client

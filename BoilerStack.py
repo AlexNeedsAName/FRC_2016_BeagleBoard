@@ -5,7 +5,7 @@ import sys
 import time
 
 def distance_to_camera(knownWidth, focalLength, perWidth):
-    #computre and return the distance from the boiler stack to the camera
+    #compute and return the distance from the boiler stack to the camera
     return (knownWidth * focalLength) / perWidth
 
 def findBoilerStack(ret, frame, showFrame):
@@ -50,12 +50,10 @@ def findBoilerStack(ret, frame, showFrame):
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
 
-        sys.stdout.write(str(w)+"\n")
+	return str(distance)
 
     else:
-        sys.stdout.write("0\n")
-
-    sys.stdout.flush()
+        return "0"
 
     #Display the resulting frame
     if showFrame == true:

@@ -4,9 +4,7 @@ import math
 import sys
 import time
 
-def processFrame(video_capture)
-    # Capture the frames
-    ret, frame = video_capture.read()
+def findBoilerLine(ret, frame, showVideo):
 
     # Gaussian blur
     blur = cv2.GaussianBlur(frame,(5,5),0)
@@ -78,28 +76,25 @@ def processFrame(video_capture)
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
 
 	#Output the angle of the line to stdout for Client.java to read
-        sys.stdout.write(str(lineDegrees)+"\n")
+        return str(lineDegrees)
 
     else:
 	#If no line is detected say the line's angle is just zero
-        sys.stdout.write("0\n")
-	lineDegrees = 0
-
-    #This is to prevent the program from accidentally holding in the stdout messages
-    sys.stdout.flush()
+        return "0"
 
     #Display the resulting frame
-    cv2.imshow('frame',frame)
+    if showVideo == true:
+        cv2.imshow('frame',frame)
 
-    return lineDegrees
 
-if(__name__ == '__main__'):
-	video_capture = cv2.VideoCapture(-1)
-	video_capture.set(3, 160)
-	video_capture.set(4, 120)
-        while True:
-		processFrame(video_capture)
-		cv2.imshow('frame',frame)
-		if cv2.waitKey(1) & 0xFF == ord('q'):
-		break
+#Might be useful in future!
+#if(__name__ == '__main__'):
+#	video_capture = cv2.VideoCapture(-1)
+#	video_capture.set(3, 160)
+#	video_capture.set(4, 120)
+ #       while True:
+#		processFrame(video_capture)
+#		cv2.imshow('frame',frame)
+#		if cv2.waitKey(1) & 0xFF == ord('q'):
+#		break
 		

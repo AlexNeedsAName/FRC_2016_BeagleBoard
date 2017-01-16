@@ -22,9 +22,11 @@ while(true):
     print data
     
     if data == 0:
-        sendData = code0
+        ret, frame = video_capture.read()
+        sendData = findBoilerLine(ret, frame, showVideo)
     if data == 1:
-        sendData = code1
+        ret, frame = video_capture.read()
+        sendData = findBoilerStack(ret, frame, showVideo)
 
     sock.sendto(str(sendData)+" ", ("roboRIO-3641-FRC.local", 3641))
 

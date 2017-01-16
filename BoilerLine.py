@@ -83,7 +83,7 @@ def findBoilerLine(ret, frame, showVideo):
         return "0"
 
     #Display the resulting frame
-    if showVideo == true:
+    if showVideo == 1:
         cv2.imshow('frame',frame)
 
 

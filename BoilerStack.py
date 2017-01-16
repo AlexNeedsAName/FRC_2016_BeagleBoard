@@ -4,19 +4,11 @@ import math
 import sys
 import time
 
-video_capture = cv2.VideoCapture(-1)
-video_capture.set(3, 160)
-video_capture.set(4, 120)
-
 def distance_to_camera(knownWidth, focalLength, perWidth):
     #computre and return the distance from the boiler stack to the camera
     return (knownWidth * focalLength) / perWidth
 
-while(True):
-
-    # Capture the frames
-    ret, frame = video_capture.read()
-
+def findBoilerStack(ret, frame, showFrame):
     # Gaussian blur
     blur = cv2.GaussianBlur(frame,(5,5),0)
 
@@ -29,9 +21,6 @@ while(True):
 
     # Threshold the HSV image to get only white colors
     thresh = cv2.inRange(hsv, lower_white, upper_white)
-
-    # Color thresholding
-    #ret,thresh = cv2.threshold(blur,60,255,cv2.THRESH_BINARY_INV)
 
     # Find the contours of the frame
     contours,hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)
@@ -69,8 +58,5 @@ while(True):
     sys.stdout.flush()
 
     #Display the resulting frame
-    cv2.imshow('frame',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-
+    if showFrame == true:
+        cv2.imshow('frame',frame)

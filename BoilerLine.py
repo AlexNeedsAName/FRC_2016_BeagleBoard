@@ -92,3 +92,14 @@ def processFrame(video_capture)
     cv2.imshow('frame',frame)
 
     return lineDegrees
+
+if(__name__ == '__main__'):
+	video_capture = cv2.VideoCapture(-1)
+	video_capture.set(3, 160)
+	video_capture.set(4, 120)
+        while True:
+		processFrame(video_capture)
+		cv2.imshow('frame',frame)
+		if cv2.waitKey(1) & 0xFF == ord('q'):
+		break
+		

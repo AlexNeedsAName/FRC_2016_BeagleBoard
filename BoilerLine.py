@@ -4,12 +4,7 @@ import math
 import sys
 import time
 
-video_capture = cv2.VideoCapture(-1)
-video_capture.set(3, 160)
-video_capture.set(4, 120)
-
-while(True):
-
+def processFrame(video_capture)
     # Capture the frames
     ret, frame = video_capture.read()
 
@@ -88,13 +83,12 @@ while(True):
     else:
 	#If no line is detected say the line's angle is just zero
         sys.stdout.write("0\n")
+	lineDegrees = 0
 
     #This is to prevent the program from accidentally holding in the stdout messages
     sys.stdout.flush()
 
     #Display the resulting frame
     cv2.imshow('frame',frame)
-    time.sleep(1)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
 
+    return lineDegrees

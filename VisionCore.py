@@ -11,7 +11,7 @@ video_capture.set(4, 120)
 
 showVideo = true
 
-UDP_IP = ""
+UDP_IP = "0.0.0.0"
 UDP_PORT = 3641
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -28,7 +28,7 @@ while(true):
         ret, frame = video_capture.read()
         sendData = findBoilerStack(ret, frame, showVideo)
 
-    sock.sendto(str(sendData)+" ", ("roboRIO-3641-FRC.local", 3641))
+    sock.sendto(str(sendData)+" ", (addr, 3641))
 
     #Quit Key
     if cv2.waitKey(1) & 0xFF == ord('q'):

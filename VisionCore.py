@@ -5,11 +5,14 @@ import sys
 import time
 import socket
 
+import BoilerLine
+import BoilerStack
+
 video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 160)
 video_capture.set(4, 120)
 
-showVideo = true
+showVideo = 1
 
 UDP_IP = "0.0.0.0"
 UDP_PORT = 3641
@@ -23,10 +26,10 @@ while(true):
     
     if data == 0:
         ret, frame = video_capture.read()
-        sendData = findBoilerLine(ret, frame, showVideo)
+        sendData = BoilerLine.findBoilerLine(ret, frame, showVideo)
     if data == 1:
         ret, frame = video_capture.read()
-        sendData = findBoilerStack(ret, frame, showVideo)
+        sendData = BoilerStack.findBoilerStack(ret, frame, showVideo)
 
     sock.sendto(str(sendData)+" ", (addr, 3641))
 

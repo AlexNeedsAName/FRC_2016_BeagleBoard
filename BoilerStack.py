@@ -56,5 +56,5 @@ def findBoilerStack(ret, frame, showFrame):
         return "0"
 
     #Display the resulting frame
-    if showFrame == true:
+    if showFrame == 1:
         cv2.imshow('frame',frame)

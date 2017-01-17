@@ -29,7 +29,7 @@ while(true):
         sendData = BoilerLine.findBoilerLine(ret, frame)
     if data == 1:
         ret, frame = video_capture.read()
-        sendData = BoilerStack.findBoilerStack(ret, frame)
+        sendDistance, sendData = BoilerStack.findBoilerStack(ret, frame)
 
     sock.sendto(str(sendData)+" ", (addr, 3641))
 

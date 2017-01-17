@@ -14,7 +14,7 @@ video_capture.set(4, 120)
 
 #Change these two values to run different conencted programs
 showVideo = 1
-data = 0
+data = 1
 
 while(True):
     if data == 0:
@@ -22,7 +22,7 @@ while(True):
         sendData = BoilerLine.findBoilerLine(ret, frame)
     if data == 1:
         ret, frame = video_capture.read()
-        sendData = BoilerStack.findBoilerStack(ret, frame)
+        sendDistance, sendData = BoilerStack.findBoilerStack(ret, frame)
 
     print sendData
 

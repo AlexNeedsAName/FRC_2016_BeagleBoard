@@ -27,5 +27,7 @@ while(True):
     print sendData
 
     #Quit Key
+    if showVideo == 1:
+        cv2.imshow('frame',frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

@@ -43,14 +43,22 @@ def findBoilerStack(ret, frame):
         cv2.line(frame,(cx,0),(cx,720),(255,0,0),1)
         cv2.line(frame,(0,cy),(1280,cy),(255,0,0),1)
 
+        if cx > 80 or cx == 80:
+            direction = cx - 80
+        if cx < 80:
+            direction = -(80-cx)
+
         #Calculate Distance
-        distance = distance_to_camera(2.25, 204, w)
+        if w != 0:
+            distance = distance_to_camera(2.25, 204, w)
+        else:
+            distance = 0
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(frame, str(distance), (10, 120), font, 1, (255, 0, 0), 2)
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
 
-	return str(distance)
+	return str(distance), direction
 
     else:
-        return "0"
+        return "0", "Unknown"

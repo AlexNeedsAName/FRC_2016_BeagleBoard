@@ -8,7 +8,7 @@ def distance_to_camera(knownWidth, focalLength, perWidth):
     #compute and return the distance from the boiler stack to the camera
     return (knownWidth * focalLength) / perWidth
 
-def findBoilerStack(ret, frame, showFrame):
+def findBoilerStack(ret, frame):
     # Gaussian blur
     blur = cv2.GaussianBlur(frame,(5,5),0)
 
@@ -54,7 +54,3 @@ def findBoilerStack(ret, frame, showFrame):
 
     else:
         return "0"
-
-    #Display the resulting frame
-    if showFrame == 1:
-        cv2.imshow('frame',frame)

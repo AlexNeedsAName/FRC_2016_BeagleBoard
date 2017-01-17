@@ -19,10 +19,10 @@ data = 0
 while(True):
     if data == 0:
         ret, frame = video_capture.read()
-        sendData = BoilerLine.findBoilerLine(ret, frame, showVideo)
+        sendData = BoilerLine.findBoilerLine(ret, frame)
     if data == 1:
         ret, frame = video_capture.read()
-        sendData = BoilerStack.findBoilerStack(ret, frame, showVideo)
+        sendData = BoilerStack.findBoilerStack(ret, frame)
 
     print sendData
 

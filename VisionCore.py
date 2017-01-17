@@ -20,6 +20,9 @@ UDP_PORT = 3641
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 
+#This starts the video feed (so future calls have faster responses)
+ret, frame = video_capture.read()
+
 while(true):
     data, addr = sock.recvfrom(256)
     print data
@@ -31,7 +34,8 @@ while(true):
         ret, frame = video_capture.read()
         sendDistance, sendData = BoilerStack.findBoilerStack(ret, frame)
 
-    sock.sendto(str(sendData)+" ", (addr, 3641))
+    #Using addr for the IP doesn't work (not sure why) so I'm using this for now
+    sock.sendto(str(sendData)+" ", ("roboRIO-3641-FRC.local", 3641))
 
     #Show Window
     if showVideo == 1:

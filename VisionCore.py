@@ -26,13 +26,15 @@ while(true):
     
     if data == 0:
         ret, frame = video_capture.read()
-        sendData = BoilerLine.findBoilerLine(ret, frame, showVideo)
+        sendData = BoilerLine.findBoilerLine(ret, frame)
     if data == 1:
         ret, frame = video_capture.read()
-        sendData = BoilerStack.findBoilerStack(ret, frame, showVideo)
+        sendData = BoilerStack.findBoilerStack(ret, frame)
 
     sock.sendto(str(sendData)+" ", (addr, 3641))
 
-    #Quit Key
+    #Show Window
+    if showVideo == 1:
+        cv2.imshow('frame',frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

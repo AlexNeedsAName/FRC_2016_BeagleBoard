@@ -4,7 +4,7 @@ import math
 import sys
 import time
 
-def findBoilerLine(ret, frame, showVideo):
+def findBoilerLine(ret, frame):
 
     # Gaussian blur
     blur = cv2.GaussianBlur(frame,(5,5),0)
@@ -81,10 +81,6 @@ def findBoilerLine(ret, frame, showVideo):
     else:
 	#If no line is detected say the line's angle is just zero
         return "0"
-
-    #Display the resulting frame
-    if showVideo == 1:
-        cv2.imshow('frame',frame)
 
 
 #Might be useful in future!

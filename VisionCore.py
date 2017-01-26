@@ -7,12 +7,13 @@ import socket
 
 import BoilerLine
 import BoilerStack
+import LineFollower
 
 video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 160)
 video_capture.set(4, 120)
 
-showVideo = 1
+showVideo = 0
 
 UDP_IP = "0.0.0.0"
 UDP_PORT = 3641
@@ -20,23 +21,24 @@ UDP_PORT = 3641
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 
-#This starts the video feed (so future calls have faster responses)
-ret, frame = video_capture.read()
+while(True):
+    data, addr = sock.recvfrom(256)    
+    #data = data.split(" ")
+    print "incoming: "+data
 
-while(true):
-    data, addr = sock.recvfrom(256)
-    print data
-    
-    if data == 0:
+    if data == "0":
         ret, frame = video_capture.read()
         sendData = BoilerLine.findBoilerLine(ret, frame)
-    if data == 1:
+    if data == "1":
         ret, frame = video_capture.read()
-        sendDistance, sendData = BoilerStack.findBoilerStack(ret, frame)
+        sendData = BoilerStack.findBoilerStack(ret, frame)
+    if data == "2":
+        ret, frame = video_capture.read()
+        sendData = LineFollower.lineOffset(ret, frame)
 
-    #Using addr for the IP doesn't work (not sure why) so I'm using this for now
     sock.sendto(str(sendData)+" ", ("roboRIO-3641-FRC.local", 3641))
 
+    data = ""
     #Show Window
     if showVideo == 1:
         cv2.imshow('frame',frame)

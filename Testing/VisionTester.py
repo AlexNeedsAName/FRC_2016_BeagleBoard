@@ -3,19 +3,24 @@ import cv2
 import math
 import sys
 import time
-import socket
+import serial
 
-import BoilerLine
-import BoilerStack
-import LineFollower
+#import BoilerLine
+#import BoilerStack
+#import LineFollower
+import SpringDetect
+
+ser = serial.Serial('/dev/ttyAMA0')
+print(ser.name)
+ser.write('TEST TEST TEST')
 
 video_capture = cv2.VideoCapture(-1)
-video_capture.set(3, 160)
-video_capture.set(4, 120)
+video_capture.set(3, 240)
+video_capture.set(4, 180)
 
 #Change these two values to run different conencted programs
 showVideo = 1
-data = 2
+data = 3
 
 while(True):
     if data == 0:
@@ -27,9 +32,11 @@ while(True):
     if data == 2:
         ret, frame = video_capture.read()
         sendData = LineFollower.lineOffset(ret, frame)
-
-    print sendData
-
+    elif data == 3:
+        ret, frame = video_capture.read()
+        sendData = SpringDetect.findSpring(ret, frame)
+    print(sendData)
+    ser.write(bytes(sendData))
     #Quit Key
     if showVideo == 1:
         cv2.imshow('frame',frame)

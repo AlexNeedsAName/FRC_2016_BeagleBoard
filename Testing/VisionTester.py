@@ -1,3 +1,9 @@
+
+
+
+##############NEED TO UNCOMMENT SERIAL!!!###################
+
+
 import numpy as np
 import cv2
 import math
@@ -5,14 +11,13 @@ import sys
 import time
 import serial
 
-#import BoilerLine
-#import BoilerStack
-#import LineFollower
+import BoilerLine
+import BoilerStack
+import LineFollower
 import SpringDetect
 
-ser = serial.Serial('/dev/ttyAMA0')
-print(ser.name)
-ser.write('TEST TEST TEST')
+#ser = serial.Serial('/dev/ttyAMA0')
+#print(ser.name)
 
 video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 240)
@@ -26,17 +31,17 @@ while(True):
     if data == 0:
         ret, frame = video_capture.read()
         sendData = BoilerLine.findBoilerLine(ret, frame)
-    if data == 1:
+    elif data == 1:
         ret, frame = video_capture.read()
         sendData = BoilerStack.findBoilerStack(ret, frame)
-    if data == 2:
+    elif data == 2:
         ret, frame = video_capture.read()
         sendData = LineFollower.lineOffset(ret, frame)
     elif data == 3:
         ret, frame = video_capture.read()
         sendData = SpringDetect.findSpring(ret, frame)
     print(sendData)
-    ser.write(bytes(sendData))
+    #ser.write(bytes(sendData))
     #Quit Key
     if showVideo == 1:
         cv2.imshow('frame',frame)

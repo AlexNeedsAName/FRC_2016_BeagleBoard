@@ -3,7 +3,7 @@ import cv2
 import math
 import sys
 import time
-import socket
+import serial
 
 import BoilerLine
 import BoilerStack
@@ -16,15 +16,12 @@ video_capture.set(4, 120)
 
 showVideo = 0
 
-UDP_IP = "0.0.0.0"
-UDP_PORT = 3641
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((UDP_IP, UDP_PORT))
+ser = serial.Serial('/dev/ttyAMA0')
 
 while(True):
-    data, addr = sock.recvfrom(256)
-    #data = data.split(" ")
+    data = ser.readline()
+
+
     print "incoming: "+data
 
     if data == "0":
@@ -39,9 +36,10 @@ while(True):
     elif data == "3":
         ret, frame = video_capture.read()
         sendData = SpringDetect.findSpring(ret, frame)
-    sock.sendto(str(sendData)+" ", ("roboRIO-3641-FRC.local", 3641))
+    else:
+        sendData = 'Bad request: ' + data
+    serial.write(bytes(sendData))
 
-    data = ""
     #Show Window
     if showVideo == 1:
         cv2.imshow('frame',frame)

@@ -4,6 +4,9 @@ import math
 import sys
 import time
 
+lower = (40,96,118)
+upper = (79,183,255)
+
 def findBoilerLine(ret, frame):
 
     # Gaussian blur
@@ -13,8 +16,8 @@ def findBoilerLine(ret, frame):
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
     # define range of red color in HSV
-    lower_red = np.array([0, 40, 0])
-    upper_red = np.array([10, 255, 255])
+    lower_red = lower
+    upper_red = upper
 
     # Threshold the HSV image to get only white colors
     thresh = cv2.inRange(hsv, lower_red, upper_red)
@@ -46,7 +49,6 @@ def findBoilerLine(ret, frame):
 
         # then apply fitline() function
         [vx, vy, x, y] = cv2.fitLine(c, cv2.cv.CV_DIST_L2, 0, 0.01, 0.01)
-
         # Now find two extreme points on the line to draw line
         lefty = int((-x * vy / vx) + y)
         righty = int(((thresh.shape[1] - x) * vy / vx) + y)

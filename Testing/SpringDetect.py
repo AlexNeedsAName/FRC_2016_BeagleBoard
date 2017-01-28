@@ -8,7 +8,7 @@ maxArea = 10000
 rectangularity = 100
 maxHeightDisparity = 30
 
-def filterContours(contours, minArea, maxArea, rectangularity):
+def filterContours(contours):
     filteredContours = []
     for cnt in contours:
         hull = cv2.convexHull(cnt)
@@ -29,7 +29,7 @@ def findSpring(ret, frame):
     frame = cv2.GaussianBlur(frame, (3, 3), 0)  # blur the frame to make less noise
     mask = cv2.inRange(cv2.cvtColor(frame, cv2.COLOR_BGR2HSV), lower, upper)
     _,contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)  # Detect contours in the image
-    contours = filterContours(contours, minArea, maxArea, rectangularity)
+    contours = filterContours(contours)
     if len(contours) == 2:
         x, y = findContourPosition(contours[0])  #find the positions of the contours
         z, w = findContourPosition(contours[1])
@@ -46,3 +46,4 @@ def findSpring(ret, frame):
                     if abs(y - w) < maxHeightDisparity:
                         return str(x),str(y)
     return "0","0"
+

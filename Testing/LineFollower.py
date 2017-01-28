@@ -1,6 +1,9 @@
 import numpy as np
 import cv2
 
+lower = (40,96,118)
+upper = (79,183,255)
+
 def lineOffset(ret, frame):
 
     # Crop the image
@@ -13,8 +16,8 @@ def lineOffset(ret, frame):
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
     # define range of red color in HSV
-    lower_red = np.array([0, 40, 0])
-    upper_red = np.array([10, 255, 255])
+    lower_red = lower
+    upper_red = upper
 
     # Threshold the HSV image to get only red colors
     thresh = cv2.inRange(hsv, lower_red, upper_red)
@@ -31,7 +34,7 @@ def lineOffset(ret, frame):
             cx = int(M['m10']/M['m00'])
             cy = int(M['m01']/M['m00'])
         else:
-	    cx = 0
+            cx = 0
             cy = 0
 
         cv2.line(crop_img,(cx,0),(cx,720),(255,0,0),1)

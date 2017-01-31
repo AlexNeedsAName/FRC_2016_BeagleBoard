@@ -8,8 +8,8 @@ top = Tkinter.Tk()
 
 
 cap = cv2.VideoCapture(-1)
-cap.set(3, 160)
-cap.set(4, 120)
+cap.set(3, 320)
+cap.set(4, 240)
 
 
 frame = 1
@@ -28,7 +28,7 @@ B.pack()
 
 while 1:
     ret, frame = cap.read()
-
+    cv2.circle(frame,(160,120),2,(255,0,0))
     # Display the frame
     cv2.imshow('frame', frame)
     top.update_idletasks()

@@ -14,10 +14,10 @@ import SpringDetect
 
 
 video_capture = cv2.VideoCapture(-1)
-video_capture.set(3, 240)
-video_capture.set(4, 180)
+video_capture.set(3, 320)
+video_capture.set(4, 240)
 
-springParams = ((-5, -5), (5, -5), (-5, 5), (5, 5), (240, 180))
+springParams = ((66,60), (320,240))
 
 #Change these two values to run different conencted programs
 showVideo = 1
@@ -38,7 +38,7 @@ while(True):
         sendData = SpringDetect.findSpring(ret, frame)
         x, y = SpringDetect.findSpring(ret, frame)
         params = springParams
-        sendData = PixelsToDegrees.screenPixelsToDegrees(x, y, params)
+        sendData = PixelsToDegrees.screenPixelsToDegrees(float(x), float(y), params)
     print(sendData)
     #ser.write(bytes(sendData))
     #Quit Key

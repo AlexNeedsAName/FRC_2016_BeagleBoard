@@ -11,12 +11,13 @@ import BoilerStack
 import LineFollower
 import SpringDetect
 
-springParams = ((-5, -5), (5, -5), (-5, 5), (5, 5), (240, 180))
+
 
 video_capture = cv2.VideoCapture(-1)
-video_capture.set(3, 160)
-video_capture.set(4, 120)
+video_capture.set(3, 320)
+video_capture.set(4, 240)
 
+springParams = ((66,60), (320,240))
 showVideo = 0
 
 ser = serial.Serial('/dev/ttyAMA0', baudrate = 115200)

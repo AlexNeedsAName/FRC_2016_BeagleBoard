@@ -36,7 +36,7 @@ def findSpring(ret, frame):
         if abs(y - w) < maxHeightDisparity:  #Check if the contours' heights are close
             x = (x + z) / 2
             y = (y + w) / 2  # find the center point between the contours
-            return str(x),str(y)
+            return x,y
     elif len(contours) > 2:
         for i in [0,len(contours) - 1]:#if there's more than 2 contours, find two at the same height.
             for j in [0,len(contours) - 1]:
@@ -44,6 +44,6 @@ def findSpring(ret, frame):
                     x, y = findContourPosition(contours[i])  # find the positions of the contours
                     z, w = findContourPosition(contours[j])
                     if abs(y - w) < maxHeightDisparity:
-                        return str(x),str(y)
-    return "0","0"
+                        return x,y
+    return 0,0
 

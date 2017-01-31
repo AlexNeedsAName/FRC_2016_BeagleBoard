@@ -5,10 +5,13 @@ import sys
 import time
 import serial
 
+import PixelsToDegrees
 import BoilerLine
 import BoilerStack
 import LineFollower
 import SpringDetect
+
+springParams = ((-5, -5), (5, -5), (-5, 5), (5, 5), (240, 180))
 
 video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 160)
@@ -36,7 +39,9 @@ while(True):
         sendData = LineFollower.lineOffset(ret, frame)
     elif '3' in data:
         ret, frame = video_capture.read()
-        sendData = SpringDetect.findSpring(ret, frame)
+        x,y = SpringDetect.findSpring(ret, frame)
+        params = springParams
+        sendData = PixelsToDegrees.screenPixelsToDegrees(x,y,params)
     else:
         sendData = 'Bad request: ' + data
     ser.write(bytes(sendData))

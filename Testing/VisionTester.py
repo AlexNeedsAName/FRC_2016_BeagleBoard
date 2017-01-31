@@ -1,9 +1,4 @@
 
-
-
-##############NEED TO UNCOMMENT SERIAL!!!###################
-
-
 import numpy as np
 import cv2
 import math
@@ -11,17 +6,18 @@ import sys
 import time
 import serial
 
+import PixelsToDegrees
 import BoilerLine
 import BoilerStack
 import LineFollower
 import SpringDetect
 
-#ser = serial.Serial('/dev/ttyAMA0')
-#print(ser.name)
 
 video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 240)
 video_capture.set(4, 180)
+
+springParams = ((-5, -5), (5, -5), (-5, 5), (5, 5), (240, 180))
 
 #Change these two values to run different conencted programs
 showVideo = 1
@@ -40,6 +36,9 @@ while(True):
     elif data == 3:
         ret, frame = video_capture.read()
         sendData = SpringDetect.findSpring(ret, frame)
+        x, y = SpringDetect.findSpring(ret, frame)
+        params = springParams
+        sendData = PixelsToDegrees.screenPixelsToDegrees(x, y, params)
     print(sendData)
     #ser.write(bytes(sendData))
     #Quit Key

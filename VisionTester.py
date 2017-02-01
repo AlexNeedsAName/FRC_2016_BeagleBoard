@@ -21,10 +21,10 @@ while(True):
     if data == 0:
         ret, frame = video_capture.read()
         sendData = BoilerLine.findBoilerLine(ret, frame)
-    elif data == 1 in data:
+    elif data == 1:
         ret, frame = video_capture.read()
         sendData = BoilerStack.findBoilerStack(ret, frame)
-    elif data == 2 in data:
+    elif data == 2:
         ret, frame = video_capture.read()
         sendData = LineFollower.lineOffset(ret, frame)
     elif data == 3:

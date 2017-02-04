@@ -4,13 +4,22 @@ import math
 import sys
 import time
 
-lower = (40,96,118)
-upper = (79,183,255)
+lower = (54, 140, 67) #(40,96,118)
+upper = (109, 255, 255) #(79,183,255)
+
+#pts1 are the original points of a square on the ground, pts2 is what to warp
+#them to
+pts1 = np.float32([[78, 82], [242, 82], [0,146], [320,146]])
+pts2 = np.float32([[0, 0], [320, 0], [0,320], [320, 320]])
 
 def findBoilerLine(ret, frame):
 
+    #Warp the image from perspective to top-down orthographic
+    warpMoments = cv2.getPerspectiveTransform(pts1, pts2)
+    dst = cv2.warpPerspective(frame, warpMoments, (320, 320))
+
     # Gaussian blur
-    blur = cv2.GaussianBlur(frame,(5,5),0)
+    blur = cv2.GaussianBlur(dst,(5,5),0)
 
     #Convert to Hue, Saturation, and Value colorspace
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
@@ -26,7 +35,7 @@ def findBoilerLine(ret, frame):
     #ret,thresh = cv2.threshold(blur,60,255,cv2.THRESH_BINARY_INV)
 
     # Find the contours of the frame
-    _,contours,hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)
+    contours,hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)
 
     # Find the biggest contour (if detected)
     if len(contours) > 0:

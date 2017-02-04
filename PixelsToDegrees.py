@@ -1,18 +1,10 @@
 
-def getScreenParams(topLeft,topRight,bottomLeft,bottomRight,resolution):
-    return(topLeft,topRight,bottomLeft,bottomRight,resolution)
+
+def screenPixelsToDegrees(x,y,degrees,resolution):
+    xAlpha = x/resolution[0]
+    yAlpha = y/resolution[1]
+    return(lerp(xAlpha, -degrees[0], degrees[0]), lerp(yAlpha, -degrees[1], degrees[1]))
 
 
-def screenPixelsToDegrees(x,y,params):
-    tl = params[0]
-    tr = params[1]
-    bl = params[2]
-    br = params[3]
-    res = params[4]
-    xAlpha = float(x)/res[0]
-    yAlpha = float(y)/res[1]
-    return lerp(lerp(bl,br,xAlpha),lerp(tl,tr,xAlpha),yAlpha)
-
-
-def lerp(min,max,alpha):
+def lerp(alpha, min, max):
     return ((max[0] - min[0]) * alpha + min[0],(max[1] - min[1]) * alpha + min[1])

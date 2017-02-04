@@ -20,6 +20,8 @@ video_capture.set(4, 240)
 springParams = ((66,60), (320,240))
 showVideo = 0
 
+cameraToBoilerHeight = 10
+
 ser = serial.Serial('/dev/ttyAMA0', baudrate = 115200)
 
 while(True):
@@ -34,7 +36,10 @@ while(True):
         sendData = 'BoilerLine not working yet :('
     elif '1' in data:
         ret, frame = video_capture.read()
-        sendData = BoilerStack.findBoilerStack(ret, frame)
+        x,y = BoilerStack.findBoilerStack(ret, frame)
+        xDeg, yDeg = PixelsToDegrees.screenPixelsToDegrees(x, y, (60, 66), (320, 240))
+        dist = cameraToBoilerHeight * math.atan(yDeg)
+        sendData = (xDeg, dist)
     elif '2' in data:
         ret, frame = video_capture.read()
         sendData = LineFollower.lineOffset(ret, frame)
@@ -42,7 +47,7 @@ while(True):
         ret, frame = video_capture.read()
         x,y = SpringDetect.findSpring(ret, frame)
         params = springParams
-        sendData = PixelsToDegrees.screenPixelsToDegrees(x,y,params)
+        sendData = PixelsToDegrees.screenPixelsToDegrees(x,y,(60,66),(320,240))
     else:
         sendData = 'Bad request: ' + data
     ser.write(bytes(sendData))

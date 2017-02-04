@@ -4,12 +4,15 @@ import math
 import sys
 import time
 
+
 lower = (40,96,118)
 upper = (79,183,255)
+
 
 def distance_to_camera(knownWidth, focalLength, perWidth):
     #compute and return the distance from the boiler stack to the camera
     return (knownWidth * focalLength) / perWidth
+
 
 def findBoilerStack(ret, frame):
     # Gaussian blur
@@ -45,7 +48,7 @@ def findBoilerStack(ret, frame):
         cv2.line(frame,(cx,0),(cx,720),(255,0,0),1)
         cv2.line(frame,(0,cy),(1280,cy),(255,0,0),1)
 
-        if cx > 80 or cx == 80:
+        if cx >= 80:
             direction = cx - 80
         if cx < 80:
             direction = -(80-cx)
@@ -59,6 +62,6 @@ def findBoilerStack(ret, frame):
         cv2.putText(frame, str(distance), (10, 120), font, 1, (255, 0, 0), 2)
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
-        return str(distance), direction
+        return (cx,cy)
     else:
         return "0", "Unknown"

@@ -62,6 +62,6 @@ def findBoilerStack(ret, frame):
         cv2.putText(frame, str(distance), (10, 120), font, 1, (255, 0, 0), 2)
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
-        return str(distance), direction
+        return (cx,cy)
     else:
         return "0", "Unknown"

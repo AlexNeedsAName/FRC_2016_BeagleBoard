@@ -1,11 +1,10 @@
 
 
-def screenPixelsToDegrees(x,y,params):
-    res = params[1]
-    degs = params[0]
-    x = x - res[0]/2
-    y = y - res[1]/2
-    x = x/res[0]
-    y = y/res[1]
-    return(x * degs[0], y * degs[1])
+def screenPixelsToDegrees(x,y,degrees,resolution):
+    xAlpha = x/resolution[0]
+    yAlpha = y/resolution[1]
+    return(lerp(xAlpha, -degrees[0], degrees[0]), lerp(yAlpha, -degrees[1], degrees[1]))
 
+
+def lerp(alpha, min, max):
+    return ((max[0] - min[0]) * alpha + min[0],(max[1] - min[1]) * alpha + min[1])

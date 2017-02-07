@@ -17,7 +17,8 @@ video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 320)
 video_capture.set(4, 240)
 
-cameraToBoilerHeight = 10.0
+cameraToBoilerHeight = 2.6
+cameraUpAngle = 30
 
 #Change these two values to run different conencted programs
 showVideo = 1
@@ -32,6 +33,7 @@ while(True):
         ret, frame = video_capture.read()
         x,y = BoilerStack.findBoilerStack(ret, frame)
         xDeg, yDeg = PixelsToDegrees.screenPixelsToDegrees(x,y,(60,66),(320,240))
+        yDeg -=cameraUpAngle
         if yDeg != 0:
             dist = cameraToBoilerHeight / math.tan(math.radians(yDeg))
         else:

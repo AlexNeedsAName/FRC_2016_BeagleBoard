@@ -37,9 +37,13 @@ while(True):
     elif '1' in data:
         ret, frame = video_capture.read()
         x,y = BoilerStack.findBoilerStack(ret, frame)
-        xDeg, yDeg = PixelsToDegrees.screenPixelsToDegrees(x, y, (60, 66), (320, 240))
-        dist = cameraToBoilerHeight * math.atan(yDeg)
+        xDeg, yDeg = PixelsToDegrees.screenPixelsToDegrees(x,y,(60,66),(320,240))
+        if yDeg != 0:
+            dist = cameraToBoilerHeight / math.tan(math.radians(yDeg))
+        else:
+            dist = 0
         sendData = (xDeg, dist)
+
     elif '2' in data:
         ret, frame = video_capture.read()
         sendData = LineFollower.lineOffset(ret, frame)

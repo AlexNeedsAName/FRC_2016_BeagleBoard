@@ -5,8 +5,8 @@ import sys
 import time
 
 
-lower = (40,96,118)
-upper = (79,183,255)
+lower = (75,73,142)
+upper = (99,223,255)
 
 
 def distance_to_camera(knownWidth, focalLength, perWidth):
@@ -62,6 +62,11 @@ def findBoilerStack(ret, frame):
         cv2.putText(frame, str(distance), (10, 120), font, 1, (255, 0, 0), 2)
 
         cv2.drawContours(frame, contours, -1, (255,0,0), 1)
+        
+        x,y,w,h = cv2.boundingRect(c)
+        cx = x + w/2
+        cy = y + h/2
+        print cx,cy
         return (cx,cy)
     else:
-        return "0", "Unknown"
+        return 0,0

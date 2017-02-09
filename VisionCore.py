@@ -1,3 +1,5 @@
+from subprocess import call
+
 import numpy as np
 import cv2
 import math
@@ -23,6 +25,12 @@ showVideo = 0
 cameraToBoilerHeight = 10
 
 ser = serial.Serial('/dev/ttyAMA0', baudrate = 115200)
+
+#Read the camera once to make it ready when the first request is sent
+ret, frame = video_capture.read()
+
+#set the camera exposure to minimum
+call(['./SetExposure.sh'])
 
 while(True):
     data = ser.readline()

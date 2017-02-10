@@ -14,7 +14,7 @@ import LineFollower
 import SpringDetect
 
 #set up the camera at the lower resolution of 320x240. The resolution could also be set to 640x480.
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(-1)
 video_capture.set(3, 320)
 video_capture.set(4, 240)
 
@@ -24,7 +24,7 @@ cameraUpAngle = 30
 
 #Change these two values to run different conencted programs
 showVideo = 1
-data = 1
+data = 3
 
 #Read the camera once to make it ready when the first request is sent
 ret, frame = video_capture.read()

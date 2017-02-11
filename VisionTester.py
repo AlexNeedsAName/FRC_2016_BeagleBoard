@@ -7,6 +7,7 @@ import sys
 import time
 import serial
 
+from VideoInputStream import VideoInputStream
 import PixelsToDegrees
 import BoilerLine
 import BoilerStack
@@ -14,33 +15,33 @@ import LineFollower
 import SpringDetect
 
 #set up the camera at the lower resolution of 320x240. The resolution could also be set to 640x480.
-video_capture = cv2.VideoCapture(-1)
-video_capture.set(3, 320)
-video_capture.set(4, 240)
+video_capture = VideoInputStream(source=-1).start()
 
+#video_capture.set(3, 320)
+#video_capture.set(4, 240)
+print "initialized camera"
 #Constants for height of goal and camera
 cameraToBoilerHeight = 2.6
-cameraUpAngle = 30
+cameraUpAngle = 15
 
 #Change these two values to run different conencted programs
 showVideo = 1
-data = 3
+data = 1
 
 #Read the camera once to make it ready when the first request is sent
 ret, frame = video_capture.read()
 
-#set the camera exposure to minimum
-call(['./SetExposure.sh'])
-
 #Main loop
-while(True):
+
+
+def main():
     if data == 0:
         ret, frame = video_capture.read()
         sendData = BoilerLine.findBoilerLine(ret, frame)
     elif data == 1:
         ret, frame = video_capture.read()
         x,y = BoilerStack.findBoilerStack(ret, frame)
-        xDeg, yDeg = PixelsToDegrees.screenPixelsToDegrees(x,y,(60,66),(320,240))
+        xDeg, yDeg = PixelsToDegrees.screenPixelsToDegrees(x,y,(30,33),(320,240))
         yDeg -=cameraUpAngle
         if yDeg != 0:
             dist = cameraToBoilerHeight / math.tan(math.radians(yDeg))
@@ -54,7 +55,7 @@ while(True):
         ret, frame = video_capture.read()
         sendData = SpringDetect.findSpring(ret, frame)
         x, y = SpringDetect.findSpring(ret, frame)
-        sendData = PixelsToDegrees.screenPixelsToDegrees(x,y,(60,66),(320,240))
+        sendData = PixelsToDegrees.screenPixelsToDegrees(x,y,(30,33),(320,240))
     else:
         sendData = 'Error'
     print(sendData)
@@ -62,5 +63,10 @@ while(True):
     #Quit Key
     if showVideo == 1:
         cv2.imshow('frame',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+
+while True:
+	try:
+		main()
+	except KeyboardInterrupt:
+		video_capture.stop()
+		sys.exit(0)

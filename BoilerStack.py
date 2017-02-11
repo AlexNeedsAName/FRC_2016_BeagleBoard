@@ -5,8 +5,8 @@ import sys
 import time
 
 
-lower = (20,62,73)
-upper = (72,255,255)
+lower = (36,152,50)
+upper = (113,255,255)
 
 
 def distance_to_camera(knownWidth, focalLength, perWidth):

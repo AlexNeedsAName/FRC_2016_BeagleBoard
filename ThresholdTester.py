@@ -2,8 +2,8 @@ import numpy as np
 import cv2
 
 cap = cv2.VideoCapture(-1)
-cap.set(3, 160)
-cap.set(4, 120)
+cap.set(3, 640)
+cap.set(4, 480)
 cap.set(15,1000)
 
 def nothing(x):

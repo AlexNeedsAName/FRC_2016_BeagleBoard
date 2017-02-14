@@ -14,6 +14,7 @@ import BoilerStack
 import LineFollower
 import SpringDetect
 
+import hash
 
 video_capture = VideoInputStream(source=-1).start()
 #video_capture.set(3, 320)
@@ -59,7 +60,9 @@ def main():
         sendData = PixelsToDegrees.screenPixelsToDegrees(x,y,(30,33),(640,480))
     else:
         sendData = 'Bad request: ' + data
-    ser.write(bytes(sendData))
+
+    Hash = hash.oneAtATime(sendData)
+    ser.write(bytes(sendData + ";" + str(Hash)))
     print 'sent: \"' + str(sendData) + '\"'
     
     

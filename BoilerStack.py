@@ -7,12 +7,32 @@ import time
 
 lower = (36,152,50)
 upper = (113,255,255)
+minArea = 20
+maxArea = 10000
+rectangularity = 100
+maxLateralDisparity = 25
 
-
-def distance_to_camera(knownWidth, focalLength, perWidth):
+'''def distance_to_camera(knownWidth, focalLength, perWidth):
     #compute and return the distance from the boiler stack to the camera
     return (knownWidth * focalLength) / perWidth
+'''
 
+def findContourPosition(contour):#find the center of the rectangle
+    x, y, w, h = cv2.boundingRect(contour)
+    x += w / 2
+    y += h / 2
+    return x,y
+
+def filterContours(contours):
+    filteredContours = []
+    for cnt in contours:
+        hull = cv2.convexHull(cnt)
+        area = cv2.contourArea(hull)
+        _,_,w,h = cv2.boundingRect(hull)
+        rectArea = w*h
+        if area > minArea and area < maxArea and (rectArea - area) * 100 / rectArea < rectangularity:  #check if the area is correct and the region is rectangular enoug
+            filteredContours.append(hull)
+    return filteredContours
 
 def findBoilerStack(ret, frame):
     # Gaussian blur
@@ -30,43 +50,46 @@ def findBoilerStack(ret, frame):
 
     # Find the contours of the frame
     _,contours,hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)
-
+    if len(contours) != 0:
+	    contours = filterContours(contours)
+	
     # Find the biggest contour (if detected)
-    if len(contours) > 0:
-        c = max(contours, key=cv2.contourArea)
-        M = cv2.moments(c)
-
-        x,y,w,h = cv2.boundingRect(c)
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-        if M['m00'] != 0:
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
-        else:
-            cx = 0
-            cy = 0
-
-        cv2.line(frame,(cx,0),(cx,720),(255,0,0),1)
-        cv2.line(frame,(0,cy),(1280,cy),(255,0,0),1)
-
-        if cx >= 80:
+    if len(contours) == 2:
+        top = max(contours, key=cv2.contourArea)
+        bottom = min(contours, key=cv2.contourArea)
+        x1, y1 = findContourPosition(top)
+        x2, y2 = findContourPosition(bottom)
+        
+        '''if cx >= 80:
             direction = cx - 80
         if cx < 80:
-            direction = -(80-cx)
-
+            direction = -(80-cx)'''
         #Calculate Distance
-        if w != 0:
+        '''if w != 0:
             distance = distance_to_camera(2.25, 204, w)
         else:
-            distance = 0
-        font = cv2.FONT_HERSHEY_SIMPLEX
+            distance = 0'''
+        '''font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(frame, str(distance), (10, 120), font, 1, (255, 0, 0), 2)
 
-        cv2.drawContours(frame, contours, -1, (255,0,0), 1)
+        cv2.drawContours(frame, contours, -1, (255,0,0), 1)'''
         
-        x,y,w,h = cv2.boundingRect(c)
-        cx = x + w/2
-        cy = y + h/2
+        cx = (x1 + x2) / 2
+        cy = (y1 + y2) / 2
+        
         print cx,cy
         return (cx,cy)
-    else:
-        return 0,0
+    elif len(contours) > 2:
+        for i in range(0,len(contours)):#if there's more than 2 contours, find two at the same height.
+            for j in range(0,len(contours)):
+                if i != j:
+                    print i,j
+                    x1, y1 = findContourPosition(contours[i])  # find the positions of the contours
+                    x2, y2 = findContourPosition(contours[j])
+                    if abs(x1 - x2) < maxLateralDisparity:
+                        cx = (x1 + x2) / 2
+                        cy = (y1 + y2) / 2
+                        print cx,cy
+                        return (cx,cy)
+    return 0,0
+    

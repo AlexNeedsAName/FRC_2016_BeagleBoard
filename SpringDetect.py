@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
 
-lower = (40,96,118)
-upper = (79,183,255)
+lower = (40,131,12)
+upper = (106,238,255)
 minArea = 20
 maxArea = 10000
 rectangularity = 100
@@ -38,8 +38,8 @@ def findSpring(ret, frame):
             y = (y + w) / 2  # find the center point between the contours
             return x,y
     elif len(contours) > 2:
-        for i in [0,len(contours) - 1]:#if there's more than 2 contours, find two at the same height.
-            for j in [0,len(contours) - 1]:
+        for i in range(0,len(contours) - 1):#if there's more than 2 contours, find two at the same height.
+            for j in range(0,len(contours) - 1):
                 if i != j:
                     x, y = findContourPosition(contours[i])  # find the positions of the contours
                     z, w = findContourPosition(contours[j])
